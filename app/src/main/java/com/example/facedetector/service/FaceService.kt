@@ -3,9 +3,7 @@ package com.example.facedetector.service
 import io.reactivex.rxjava3.core.Single
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
-import retrofit2.http.Multipart
-import retrofit2.http.POST
-import retrofit2.http.Part
+import retrofit2.http.*
 
 interface FaceService {
 
@@ -17,4 +15,9 @@ interface FaceService {
     @POST("api/recognite/")
     fun recognite(@Part file: MultipartBody.Part): Single<Attendee>
 
+    @POST("api/delete/")
+    fun delete(@Body id: Int): Single<List<Attendee>>
+
+    @GET("api/all_users")
+    fun getAllUsers(): Single<List<Attendee>>
 }

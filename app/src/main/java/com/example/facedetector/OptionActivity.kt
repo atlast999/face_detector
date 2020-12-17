@@ -15,6 +15,11 @@ class OptionActivity : AppCompatActivity() {
         val btnConfirm = findViewById<Button>(R.id.btnConfirm)
         val btnToUpload = findViewById<Button>(R.id.btnToUpload)
         val btnRecognise = findViewById<Button>(R.id.btnToRecognite)
+        val btnListAttendee = findViewById<Button>(R.id.btnListAttendees)
+
+        btnListAttendee.setOnClickListener {
+            startActivity(Intent(this@OptionActivity, AttendeeActivity::class.java))
+        }
 
         val pref = App.getPref()
         val server = pref?.getString("baseUrl", "not set")

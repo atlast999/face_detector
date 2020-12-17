@@ -23,6 +23,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
 import com.example.facedetector.dialog.BaseDialog
 import com.example.facedetector.dialog.LoadingDialog
+import com.example.facedetector.dialog.ResultDialog
 import com.example.facedetector.face.FaceDetectorProcessor
 import com.example.facedetector.face.VisionImageProcessor
 import com.example.facedetector.imagehelper.ImageHelper
@@ -71,7 +72,6 @@ class MainActivity : AppCompatActivity(), CompoundButton.OnCheckedChangeListener
 
     private lateinit var tvTimeOut: TextView
 
-    @RequiresApi(Build.VERSION_CODES.P)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -218,7 +218,6 @@ class MainActivity : AppCompatActivity(), CompoundButton.OnCheckedChangeListener
         cameraProvider!!.bindToLifecycle(this, cameraSelector!!, imageCaptureUseCase)
     }
 
-    @RequiresApi(Build.VERSION_CODES.P)
     private fun takePicture(){
         val dir = File(applicationContext.filesDir, "mydir")
         if(!dir.exists()) dir.mkdir()
@@ -229,14 +228,10 @@ class MainActivity : AppCompatActivity(), CompoundButton.OnCheckedChangeListener
         imageCaptureUseCase!!.targetRotation = Surface.ROTATION_0
         imageCaptureUseCase!!.takePicture(
             outputFileOption,
-            mainExecutor,
+            ContextCompat.getMainExecutor(this),
             object : ImageCapture.OnImageSavedCallback {
                 override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
-//                    Glide.with(this@MainActivity)
-//                        .load(myImage)
-//                        .diskCacheStrategy(DiskCacheStrategy.NONE)
-//                        .skipMemoryCache(true)
-//                        .into(imageView!!)
+//
                    if (actionType == "upload"){
                        doUpload(myImage)
                    } else {
@@ -311,11 +306,11 @@ class MainActivity : AppCompatActivity(), CompoundButton.OnCheckedChangeListener
                 if (error != null){
                     Toast.makeText(this@MainActivity, error.message, Toast.LENGTH_LONG)
                         .show()
+                    BaseDialog.dismissIfShowing(this@MainActivity, LoadingDialog.TAG)
                 } else {
                     BaseDialog.dismissIfShowing(this@MainActivity, LoadingDialog.TAG)
-                    val res = if (attendee.name != null) attendee.name + " : " + attendee.attendId else "not recognise!!!"
-                    Toast.makeText(this@MainActivity, res, Toast.LENGTH_LONG)
-                        .show()
+                    val resultDialog = ResultDialog.newInstance(attendee)
+                    resultDialog.show(this)
                 }
             }
     }
