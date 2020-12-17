@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.facedetector.adapter.AttendeeAdapter
 import com.example.facedetector.service.Attendee
+import com.example.facedetector.service.DeleteRequest
 import com.example.facedetector.service.FaceService
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.schedulers.Schedulers
@@ -22,7 +23,7 @@ class AttendeeActivity : AppCompatActivity() {
         val recyclerView = findViewById<RecyclerView>(R.id.recyclerView)
         recyclerView.layoutManager = LinearLayoutManager(this)
 
-        val adapter = AttendeeAdapter(this) {
+        adapter = AttendeeAdapter(this) {
             deleteAttendee(it)
         }
 
@@ -35,7 +36,7 @@ class AttendeeActivity : AppCompatActivity() {
     }
 
     private fun deleteAttendee(attendee: Attendee){
-        faceService.delete(attendee.attendId)
+        faceService.delete(DeleteRequest(attendee.attendId))
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe {

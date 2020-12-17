@@ -11,11 +11,11 @@ import com.example.facedetector.service.Attendee
 
 class AttendeeAdapter(val context: Context, val deleteClick: (Attendee) -> Unit): RecyclerView.Adapter<AttendeeAdapter.ViewHolder>() {
 
-    private val data: MutableList<Attendee>? = null
+    private val data = mutableListOf<Attendee>()
 
     fun setData(list: List<Attendee>){
-        data?.clear()
-        data?.addAll(list)
+        data.clear()
+        data.addAll(list)
         notifyDataSetChanged()
     }
 
@@ -25,16 +25,16 @@ class AttendeeAdapter(val context: Context, val deleteClick: (Attendee) -> Unit)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val attendee = data?.get(position)
-        holder.tvName.text = attendee?.name
-        holder.tvId.text = attendee?.attendId.toString()
+        val attendee = data[position]
+        holder.tvName.text = attendee.name
+        holder.tvId.text = attendee.attendId.toString()
         holder.tvDelete.setOnClickListener {
-            deleteClick(attendee!!)
+            deleteClick(attendee)
         }
     }
 
     override fun getItemCount(): Int {
-        return data?.size!!
+        return data.size
     }
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){

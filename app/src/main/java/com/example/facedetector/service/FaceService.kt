@@ -16,7 +16,7 @@ interface FaceService {
     fun recognite(@Part file: MultipartBody.Part): Single<Attendee>
 
     @POST("api/delete/")
-    fun delete(@Body id: Int): Single<List<Attendee>>
+    fun delete(@Body request: DeleteRequest): Single<List<Attendee>>
 
     @GET("api/all_users")
     fun getAllUsers(): Single<List<Attendee>>

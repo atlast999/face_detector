@@ -33,7 +33,7 @@ class UploadActivity : AppCompatActivity() {
 //            val request = UploadRequest(filePart, edtName.text.toString(), edtId.text.toString().toInt())
             val name = edtName.text.toString().toRequestBody("text/plain".toMediaTypeOrNull())
             val id = edtId.text.toString().toRequestBody("text/plain".toMediaTypeOrNull())
-            val filePart = MultipartBody.Part.createFormData("file", edtName.text.toString() + ".jpeg", newFile.asRequestBody("image/*".toMediaTypeOrNull()))
+            val filePart = MultipartBody.Part.createFormData("file", edtName.text.toString() + edtId.text.toString()+ ".jpeg", newFile.asRequestBody("image/*".toMediaTypeOrNull()))
             faceService.uploadData(filePart, name, id)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
