@@ -3,6 +3,7 @@ package com.example.facedetector
 import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
+import com.example.facedetector.service.DeviceService
 import com.example.facedetector.service.FaceService
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
@@ -24,6 +25,7 @@ class App : Application(){
     companion object{
         private var preferences: SharedPreferences? = null
         private var faceService: FaceService? = null
+        private var deviceService: DeviceService? = null
         fun setUpPreferences(pref: SharedPreferences){
             preferences = pref
         }
@@ -35,6 +37,27 @@ class App : Application(){
                 faceService = buildFaceService()
             }
             return faceService!!
+        }
+
+        fun getDeviceService(): DeviceService{
+            if (deviceService == null){
+                deviceService = buildDeviceService()
+            }
+            return deviceService!!
+        }
+
+        private fun buildDeviceService(): DeviceService{
+            val gson: Gson = GsonBuilder()
+                .excludeFieldsWithoutExposeAnnotation()
+                .create()
+            val baseUrl = preferences?.getString("deviceUrl", "http://192.168.42.156:8000") ?: "http://192.168.42.156:8000"
+            val retrofit =  Retrofit.Builder()
+                .baseUrl(baseUrl)
+                .addConverterFactory(GsonConverterFactory.create(gson))
+                .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
+                .client(defaultOkHttpClient())
+                .build()
+            return retrofit.create(DeviceService::class.java)
         }
 
         private fun buildFaceService(): FaceService {
