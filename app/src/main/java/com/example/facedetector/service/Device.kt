@@ -11,3 +11,7 @@ data class Device(
 data class CommandRequest(
     @SerializedName("command") @Expose val command: String
 )
+
+data class CommandResponse(
+    @SerializedName("status") @Expose val status: String
+)

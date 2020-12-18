@@ -27,6 +27,7 @@ import com.example.facedetector.dialog.ResultDialog
 import com.example.facedetector.face.FaceDetectorProcessor
 import com.example.facedetector.face.VisionImageProcessor
 import com.example.facedetector.imagehelper.ImageHelper
+import com.example.facedetector.service.Attendee
 import com.example.facedetector.service.FaceService
 import com.example.facedetector.timehelper.ItervalTimeOutTimer
 import com.example.facedetector.timehelper.TimeOutTimer
@@ -252,7 +253,7 @@ class MainActivity : AppCompatActivity(), CompoundButton.OnCheckedChangeListener
         startActivity(intent)
     }
 
-    private val timer = object: ItervalTimeOutTimer(3, 1, TimeUnit.SECONDS){
+    private val timer = object: ItervalTimeOutTimer(3, 600, TimeUnit.MILLISECONDS){
 
         override fun onTimeTick(remain: Long) {
             tvTimeOut.text = remain.toString()
@@ -301,6 +302,10 @@ class MainActivity : AppCompatActivity(), CompoundButton.OnCheckedChangeListener
             .doOnError {
                 Toast.makeText(this@MainActivity, it.message, Toast.LENGTH_LONG)
                     .show()
+                val attendee = Attendee(null, 0)
+                BaseDialog.dismissIfShowing(this@MainActivity, LoadingDialog.TAG)
+                val resultDialog = ResultDialog.newInstance(attendee)
+                resultDialog.show(this)
             }
             .subscribe { attendee, error ->
                 if (error != null){

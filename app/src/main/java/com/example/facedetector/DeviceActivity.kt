@@ -9,6 +9,7 @@ import com.example.facedetector.service.CommandRequest
 import com.example.facedetector.timehelper.TimeOutTimer
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.schedulers.Schedulers
+import kotlinx.android.synthetic.main.activity_device.*
 import java.util.concurrent.TimeUnit
 
 class DeviceActivity : AppCompatActivity() {
@@ -21,8 +22,10 @@ class DeviceActivity : AppCompatActivity() {
         deviceState.observe(this){
             if (it){
                 loadImage(R.drawable.light_on)
+                btnTurn.text = "Turn off"
             } else {
                 loadImage(R.drawable.light_off)
+                btnTurn.text = "Turn on"
             }
         }
 
@@ -52,8 +55,8 @@ class DeviceActivity : AppCompatActivity() {
             deviceService.sendCommand(CommandRequest(command))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
-                    deviceState.value = !deviceState.value!!
+                .subscribe { response ->
+                    deviceState.value = response.status == "1"
                 }
         }
 

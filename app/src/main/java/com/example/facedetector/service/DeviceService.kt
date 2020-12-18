@@ -12,5 +12,5 @@ interface DeviceService {
     fun sensors(): Single<List<Device>>
 
     @POST("api/devices")
-    fun sendCommand(@Body request: CommandRequest): Completable
+    fun sendCommand(@Body request: CommandRequest): Single<CommandResponse>
 }

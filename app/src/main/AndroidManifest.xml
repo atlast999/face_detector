@@ -17,15 +17,22 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
         <activity android:name=".DeviceActivity"></activity>
-        <activity android:name=".FunctionActivity" />
-        <activity android:name=".AttendeeActivity" />
-        <activity android:name=".UploadActivity" />
-        <activity android:name=".OptionActivity">
+        <activity android:name=".FunctionActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
+        </activity>
+        <activity android:name=".AttendeeActivity" />
+        <activity android:name=".UploadActivity" />
+        <activity android:name=".OptionActivity">
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action.MAIN" />-->
+
+<!--                <category android:name="android.intent.category.LAUNCHER" />-->
+<!--            </intent-filter>-->
         </activity>
         <activity android:name=".MainActivity" />
     </application>
