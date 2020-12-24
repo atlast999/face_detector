@@ -27,52 +27,56 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 
-    <TextView
-        android:id="@+id/edtTemper"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        app:layout_constraintBottom_toBottomOf="@+id/textView2"
-        app:layout_constraintStart_toEndOf="@+id/textView2"
-        app:layout_constraintTop_toTopOf="@+id/textView2" />
-
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="32dp"
-        android:text="Temperature"
+    <ImageView
+        android:id="@+id/imgTemper"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginStart="64dp"
+        android:layout_marginTop="56dp"
+        android:src="@drawable/temper"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/edtServer" />
 
     <TextView
-        android:id="@+id/textView3"
+        android:textColor="#FF0000"
+        android:textSize="30sp"
+        android:layout_marginTop="20dp"
+        android:id="@+id/edtTemper"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="32dp"
-        android:text="Humidity"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edtTemper" />
+        app:layout_constraintEnd_toEndOf="@+id/imgTemper"
+        app:layout_constraintStart_toStartOf="@+id/imgTemper"
+        app:layout_constraintTop_toBottomOf="@+id/imgTemper"
+        tools:text="22" />
+
+    <ImageView
+        android:id="@+id/imgHumi"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginEnd="64dp"
+        android:src="@drawable/humi"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/imgTemper" />
 
     <TextView
+        android:textColor="#00B0FF"
+        android:textSize="30sp"
+        android:layout_marginTop="20dp"
         android:id="@+id/edtHumi"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        app:layout_constraintBottom_toBottomOf="@+id/textView3"
-        app:layout_constraintStart_toEndOf="@+id/textView3"
-        app:layout_constraintTop_toTopOf="@+id/textView3" />
+        app:layout_constraintEnd_toEndOf="@+id/imgHumi"
+        app:layout_constraintStart_toStartOf="@+id/imgHumi"
+        app:layout_constraintTop_toBottomOf="@+id/imgHumi"
+        tools:text="60" />
 
 
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="200dp"
         android:layout_height="200dp"
-        android:layout_marginTop="128dp"
+        android:layout_marginTop="96dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/edtHumi"
         tools:srcCompat="@tools:sample/avatars" />
