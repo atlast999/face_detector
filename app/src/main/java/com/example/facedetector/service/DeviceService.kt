@@ -1,6 +1,5 @@
 package com.example.facedetector.service
 
-import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.core.Single
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -13,4 +12,7 @@ interface DeviceService {
 
     @POST("api/devices")
     fun sendCommand(@Body request: CommandRequest): Single<CommandResponse>
+
+    @POST("user/login")
+    fun login(@Body request: LoginRequest): Single<LoginResponse>
 }
