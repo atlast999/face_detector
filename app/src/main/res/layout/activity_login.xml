@@ -21,6 +21,7 @@
         tools:ignore="RtlSymmetry" />
 
     <androidx.appcompat.widget.AppCompatEditText
+        android:inputType="textPassword"
         android:id="@+id/edt_password"
         android:layout_width="0dp"
         android:layout_height="50dp"
