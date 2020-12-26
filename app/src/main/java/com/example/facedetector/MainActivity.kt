@@ -152,7 +152,7 @@ class MainActivity : AppCompatActivity(), CompoundButton.OnCheckedChangeListener
             .setContourMode(FaceDetectorOptions.CONTOUR_MODE_NONE)
             .setClassificationMode(FaceDetectorOptions.CLASSIFICATION_MODE_NONE)
             .setPerformanceMode(FaceDetectorOptions.PERFORMANCE_MODE_FAST)
-            .setMinFaceSize(0.1F)
+            .setMinFaceSize(1F)
             .build()
         imageProcessor = FaceDetectorProcessor(this, faceDetectorOptions) {
             liveCaptureState.value = it
