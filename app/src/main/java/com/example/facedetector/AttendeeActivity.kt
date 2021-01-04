@@ -13,7 +13,7 @@ import io.reactivex.rxjava3.schedulers.Schedulers
 
 class AttendeeActivity : AppCompatActivity() {
     private lateinit var adapter: AttendeeAdapter
-    private lateinit var faceService: FaceService
+    private var faceService: FaceService? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_attendees)
@@ -27,7 +27,7 @@ class AttendeeActivity : AppCompatActivity() {
             deleteAttendee(it)
         }
 
-        faceService.getAllUsers()
+        faceService!!.getAllUsers()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe { attendees -> adapter.setData(attendees) }
@@ -36,7 +36,7 @@ class AttendeeActivity : AppCompatActivity() {
     }
 
     private fun deleteAttendee(attendee: Attendee){
-        faceService.delete(DeleteRequest(attendee.attendId))
+        faceService!!.delete(DeleteRequest(attendee.attendId))
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe {

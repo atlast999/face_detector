@@ -6,36 +6,16 @@
     android:layout_height="match_parent"
     tools:context=".DeviceActivity">
 
-    <EditText
-        android:id="@+id/edtServer"
-        android:ems="10"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        app:layout_constraintBottom_toBottomOf="@+id/btnSetServer"
-        app:layout_constraintEnd_toStartOf="@+id/btnSetServer"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/btnSetServer" />
-
-    <Button
-        android:layout_marginTop="32dp"
-        android:layout_marginEnd="20dp"
-        android:text="Set server"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:id="@+id/btnSetServer"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
 
     <ImageView
+        android:layout_marginTop="100dp"
         android:id="@+id/imgTemper"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_marginStart="64dp"
-        android:layout_marginTop="56dp"
         android:src="@drawable/temper"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edtServer" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:textColor="#FF0000"
@@ -75,8 +55,9 @@
         android:id="@+id/imageView"
         android:layout_width="200dp"
         android:layout_height="200dp"
-        android:layout_marginTop="96dp"
+        android:layout_marginTop="60dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/edtHumi"
         tools:srcCompat="@tools:sample/avatars" />
@@ -90,5 +71,15 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView" />
+
+    <Button
+        android:id="@+id/btnVoice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:text="VOICE"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnTurn" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

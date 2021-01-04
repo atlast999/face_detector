@@ -12,6 +12,7 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.lang.Exception
 import java.util.concurrent.TimeUnit
 
 class App : Application(){
@@ -32,46 +33,55 @@ class App : Application(){
 
         fun getPref() = preferences
 
-        fun getFaceService(): FaceService {
+        fun getFaceService(): FaceService? {
             if (faceService == null){
                 faceService = buildFaceService()
             }
-            return faceService!!
+            return faceService
         }
 
-        fun getDeviceService(): DeviceService{
+        fun getDeviceService(): DeviceService?{
             if (deviceService == null){
                 deviceService = buildDeviceService()
             }
-            return deviceService!!
+            return deviceService
         }
 
-        private fun buildDeviceService(): DeviceService{
-            val gson: Gson = GsonBuilder()
-                .excludeFieldsWithoutExposeAnnotation()
-                .create()
-            val baseUrl = preferences?.getString("deviceUrl", "http://192.168.42.156:8000") ?: "http://192.168.42.156:8000"
-            val retrofit =  Retrofit.Builder()
-                .baseUrl(baseUrl)
-                .addConverterFactory(GsonConverterFactory.create(gson))
-                .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
-                .client(defaultOkHttpClient())
-                .build()
-            return retrofit.create(DeviceService::class.java)
+        private fun buildDeviceService(): DeviceService?{
+            return try {
+                val gson: Gson = GsonBuilder()
+                    .excludeFieldsWithoutExposeAnnotation()
+                    .create()
+                val baseUrl = preferences?.getString("deviceUrl", "http://192.168.42.156:8000") ?: "http://192.168.42.156:8000"
+                val retrofit =  Retrofit.Builder()
+                    .baseUrl(baseUrl)
+                    .addConverterFactory(GsonConverterFactory.create(gson))
+                    .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
+                    .client(defaultOkHttpClient())
+                    .build()
+                retrofit.create(DeviceService::class.java)
+            }catch (e: Exception){
+                null
+            }
+
         }
 
-        private fun buildFaceService(): FaceService {
-            val gson: Gson = GsonBuilder()
-                .excludeFieldsWithoutExposeAnnotation()
-                .create()
-            val baseUrl = preferences?.getString("baseUrl", "http://192.168.42.156:8000") ?: "http://192.168.42.156:8000"
-            val retrofit =  Retrofit.Builder()
-                .baseUrl(baseUrl)
-                .addConverterFactory(GsonConverterFactory.create(gson))
-                .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
-                .client(defaultOkHttpClient())
-                .build()
-            return  retrofit.create(FaceService::class.java)
+        private fun buildFaceService(): FaceService? {
+            return try {
+                val gson: Gson = GsonBuilder()
+                    .excludeFieldsWithoutExposeAnnotation()
+                    .create()
+                val baseUrl = preferences?.getString("baseUrl", "http://192.168.42.156:8000") ?: "http://192.168.42.156:8000"
+                val retrofit =  Retrofit.Builder()
+                    .baseUrl(baseUrl)
+                    .addConverterFactory(GsonConverterFactory.create(gson))
+                    .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
+                    .client(defaultOkHttpClient())
+                    .build()
+                retrofit.create(FaceService::class.java)
+            }catch (e: Exception){
+                null
+            }
         }
 
         private fun defaultOkHttpClient(): OkHttpClient {

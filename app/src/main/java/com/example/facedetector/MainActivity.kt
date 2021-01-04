@@ -69,7 +69,7 @@ class MainActivity : AppCompatActivity(), CompoundButton.OnCheckedChangeListener
     private var needUpdateGraphicOverlayImageSourceInfo = false
 
     private lateinit var actionType: String
-    private lateinit var faceService: FaceService
+    private var faceService: FaceService? = null
 
     private lateinit var tvTimeOut: TextView
 
@@ -293,7 +293,7 @@ class MainActivity : AppCompatActivity(), CompoundButton.OnCheckedChangeListener
 //                    val filePart = MultipartBody.Part.createFormData("file", myImage.name, myImage.asRequestBody("image/*".toMediaTypeOrNull()))
         val filePart = MultipartBody.Part.createFormData("file", newFile.name, newFile.asRequestBody("image/*".toMediaTypeOrNull()))
 
-        faceService.recognite(filePart)
+        faceService!!.recognite(filePart)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .doOnSubscribe {
