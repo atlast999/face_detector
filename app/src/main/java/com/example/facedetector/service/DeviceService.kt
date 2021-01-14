@@ -15,4 +15,19 @@ interface DeviceService {
 
     @POST("user/login")
     fun login(@Body request: LoginRequest): Single<LoginResponse>
+
+
+    @Multipart
+    @POST("api/upload")
+    fun uploadData(@Part file: MultipartBody.Part, @Part("name") name: RequestBody, @Part("id") id: RequestBody): Single<UploadResponse>
+
+    @Multipart
+    @POST("api/recognite")
+    fun recognite(@Part file: MultipartBody.Part): Single<Attendee>
+
+    @POST("api/delete")
+    fun delete(@Body request: DeleteRequest): Single<List<Attendee>>
+
+    @GET("api/all_users")
+    fun getAllUsers(): Single<List<Attendee>>
 }

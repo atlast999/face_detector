@@ -9,6 +9,7 @@
 
 
     <androidx.appcompat.widget.AppCompatEditText
+        android:singleLine="true"
         app:layout_constraintTop_toTopOf="parent"
         android:id="@+id/edt_username"
         android:layout_width="0dp"
@@ -47,27 +48,6 @@
         app:layout_constraintTop_toBottomOf="@id/edt_password" />
 
 
-    <EditText
-        android:layout_marginEnd="10dp"
-        android:id="@+id/edtFaceServer"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="4dp"
-        android:inputType="textPersonName"
-        app:layout_constraintBottom_toBottomOf="@+id/btnFaceServer"
-        app:layout_constraintEnd_toStartOf="@+id/btnFaceServer"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/btnFaceServer" />
-
-    <Button
-        android:id="@+id/btnFaceServer"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="72dp"
-        android:text="Set face server"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btn_login" />
-
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btn_setting"
         android:layout_width="0dp"
@@ -94,9 +74,9 @@
         android:id="@+id/btnDeviceServer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="180dp"
         android:text="Set device server"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnFaceServer" />
+        app:layout_constraintTop_toBottomOf="@+id/btn_login" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

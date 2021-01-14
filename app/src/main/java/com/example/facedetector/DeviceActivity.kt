@@ -46,6 +46,15 @@ class DeviceActivity : AppCompatActivity() {
 
         deviceService = App.getDeviceService()
 
+        deviceService!!.sensors()
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe { listSensors ->
+                val device = listSensors[0]
+                tvTemper.text = device.temperature
+                tvHumi.text = device.humidity
+            }
+
         btnTurn.setOnClickListener {
             val command = if(deviceState.value!!) "0" else "1"
             deviceService!!.sendCommand(CommandRequest(command))

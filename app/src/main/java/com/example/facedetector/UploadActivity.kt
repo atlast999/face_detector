@@ -27,14 +27,14 @@ class UploadActivity : AppCompatActivity() {
 
         val newPath = ImageHelper.compressImage(filePath)
         val newFile = File(newPath)
-        val faceService = App.getFaceService()
+        val service = App.getDeviceService()
 
         btnOK.setOnClickListener {
 //            val request = UploadRequest(filePart, edtName.text.toString(), edtId.text.toString().toInt())
             val name = edtName.text.toString().toRequestBody("text/plain".toMediaTypeOrNull())
             val id = edtId.text.toString().toRequestBody("text/plain".toMediaTypeOrNull())
             val filePart = MultipartBody.Part.createFormData("file", edtName.text.toString() + edtId.text.toString()+ ".jpeg", newFile.asRequestBody("image/*".toMediaTypeOrNull()))
-            faceService!!.uploadData(filePart, name, id)
+            service!!.uploadData(filePart, name, id)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnError {

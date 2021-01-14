@@ -28,23 +28,15 @@ import com.example.facedetector.face.FaceDetectorProcessor
 import com.example.facedetector.face.VisionImageProcessor
 import com.example.facedetector.imagehelper.ImageHelper
 import com.example.facedetector.service.Attendee
-import com.example.facedetector.service.FaceService
+import com.example.facedetector.service.DeviceService
 import com.example.facedetector.timehelper.ItervalTimeOutTimer
-import com.example.facedetector.timehelper.TimeOutTimer
-import com.google.gson.Gson
-import com.google.gson.GsonBuilder
 import com.google.mlkit.common.MlKitException
 import com.google.mlkit.vision.face.FaceDetectorOptions
-import hu.akarnokd.rxjava3.retrofit.RxJava3CallAdapterFactory
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.schedulers.Schedulers
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
-import okhttp3.OkHttpClient
 import okhttp3.RequestBody.Companion.asRequestBody
-import okhttp3.logging.HttpLoggingInterceptor
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 import java.io.File
 import java.util.*
 import java.util.concurrent.TimeUnit
@@ -69,7 +61,7 @@ class MainActivity : AppCompatActivity(), CompoundButton.OnCheckedChangeListener
     private var needUpdateGraphicOverlayImageSourceInfo = false
 
     private lateinit var actionType: String
-    private var faceService: FaceService? = null
+    private var faceService: DeviceService? = null
 
     private lateinit var tvTimeOut: TextView
 
@@ -117,7 +109,7 @@ class MainActivity : AppCompatActivity(), CompoundButton.OnCheckedChangeListener
             runtimePermissions
         }
 
-        faceService = App.getFaceService()
+        faceService = App.getDeviceService()
     }
 
 

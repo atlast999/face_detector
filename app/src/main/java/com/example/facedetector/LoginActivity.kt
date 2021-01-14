@@ -20,25 +20,11 @@ class LoginActivity : AppCompatActivity() {
         val btnLogin = findViewById<Button>(R.id.btn_login)
         val btnSetting = findViewById<Button>(R.id.btn_setting)
 
-        val edtFaceServer = findViewById<EditText>(R.id.edtFaceServer)
-        val btnFaceServer = findViewById<Button>(R.id.btnFaceServer)
-
-        val pref = App.getPref()
-        val faceServer = pref?.getString("baseUrl", "not set")
-        edtFaceServer.setText(faceServer)
-
-        btnFaceServer.setOnClickListener {
-            val baseUrl = "http://" + edtFaceServer.text.toString()
-            with(pref!!.edit()){
-                putString("baseUrl", baseUrl)
-                apply()
-            }
-            Toast.makeText(this@LoginActivity, "Save face server: $baseUrl ->Restart the app to apply", Toast.LENGTH_LONG).show()
-        }
 
         val edtDeviceServer = findViewById<EditText>(R.id.edtDeviceServer)
         val btnDeviceServer = findViewById<Button>(R.id.btnDeviceServer)
 
+        val pref = App.getPref()
         val deviceServer = pref?.getString("deviceUrl", "not set")
         edtDeviceServer.setText(deviceServer)
         btnDeviceServer.setOnClickListener {

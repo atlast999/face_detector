@@ -4,7 +4,6 @@ import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
 import com.example.facedetector.service.DeviceService
-import com.example.facedetector.service.FaceService
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import hu.akarnokd.rxjava3.retrofit.RxJava3CallAdapterFactory
@@ -25,20 +24,12 @@ class App : Application(){
 
     companion object{
         private var preferences: SharedPreferences? = null
-        private var faceService: FaceService? = null
         private var deviceService: DeviceService? = null
         fun setUpPreferences(pref: SharedPreferences){
             preferences = pref
         }
 
         fun getPref() = preferences
-
-        fun getFaceService(): FaceService? {
-            if (faceService == null){
-                faceService = buildFaceService()
-            }
-            return faceService
-        }
 
         fun getDeviceService(): DeviceService?{
             if (deviceService == null){
@@ -66,23 +57,6 @@ class App : Application(){
 
         }
 
-        private fun buildFaceService(): FaceService? {
-            return try {
-                val gson: Gson = GsonBuilder()
-                    .excludeFieldsWithoutExposeAnnotation()
-                    .create()
-                val baseUrl = preferences?.getString("baseUrl", "http://192.168.42.156:8000") ?: "http://192.168.42.156:8000"
-                val retrofit =  Retrofit.Builder()
-                    .baseUrl(baseUrl)
-                    .addConverterFactory(GsonConverterFactory.create(gson))
-                    .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
-                    .client(defaultOkHttpClient())
-                    .build()
-                retrofit.create(FaceService::class.java)
-            }catch (e: Exception){
-                null
-            }
-        }
 
         private fun defaultOkHttpClient(): OkHttpClient {
             val httpLoggingInterceptor =  HttpLoggingInterceptor()
