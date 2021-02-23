@@ -18,16 +18,16 @@ interface DeviceService {
 
 
     @Multipart
-    @POST("api/upload")
+    @POST("python/api/upload/")
     fun uploadData(@Part file: MultipartBody.Part, @Part("name") name: RequestBody, @Part("id") id: RequestBody): Single<UploadResponse>
 
     @Multipart
-    @POST("api/recognite")
+    @POST("python/api/recognite/")
     fun recognite(@Part file: MultipartBody.Part): Single<Attendee>
 
-    @POST("api/delete")
+    @POST("python/api/delete/")
     fun delete(@Body request: DeleteRequest): Single<List<Attendee>>
 
-    @GET("api/all_users")
+    @GET("python/api/all_users/")
     fun getAllUsers(): Single<List<Attendee>>
 }
