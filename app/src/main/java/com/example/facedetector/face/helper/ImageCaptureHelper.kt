@@ -144,6 +144,31 @@ class ImageCaptureHelper(
         return cameraProviderLiveData
     }
 
+    fun changeLens(lifecycle: LifecycleOwner,
+                   previewView: PreviewView?,
+                   graphicOverlay: GraphicOverlay?){
+        if (cameraProvider == null) {
+            return
+        }
+        val newLensFacing = if (lensFacing == CameraSelector.LENS_FACING_FRONT) {
+            CameraSelector.LENS_FACING_BACK
+        } else {
+            CameraSelector.LENS_FACING_FRONT
+        }
+        val newCameraSelector =
+            CameraSelector.Builder().requireLensFacing(newLensFacing).build()
+        try {
+            if (cameraProvider!!.hasCamera(newCameraSelector)) {
+                lensFacing = newLensFacing
+                cameraSelector = newCameraSelector
+                bindAllCameraUseCases(lifecycle, previewView, graphicOverlay)
+                return
+            }
+        } catch (e: CameraInfoUnavailableException) {
+            // Falls through
+        }
+    }
+
     fun startObservingCamera(
         lifecycle: LifecycleOwner,
         previewView: PreviewView?,

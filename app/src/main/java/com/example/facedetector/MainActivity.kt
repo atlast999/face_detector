@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
+import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.camera.view.PreviewView
 import androidx.core.app.ActivityCompat
@@ -33,6 +34,11 @@ class MainActivity : AppCompatActivity(){
             runtimePermissions
         } else{
             bindAllCameraUseCases()
+        }
+
+        val button = findViewById<Button>(R.id.button)
+        button.setOnClickListener {
+            imageHelper?.changeLens(this, previewView, graphicOverlay)
         }
     }
 

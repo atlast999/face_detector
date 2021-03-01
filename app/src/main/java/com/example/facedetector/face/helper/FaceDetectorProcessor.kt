@@ -1,7 +1,11 @@
 package com.example.facedetector.face.helper
 
 import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.Matrix
+import android.graphics.RectF
 import android.util.Log
+import androidx.core.graphics.toRectF
 import com.example.facedetector.ai.RecognitionAPI
 import com.google.android.gms.tasks.Task
 import com.google.mlkit.vision.common.InputImage
@@ -35,13 +39,27 @@ class FaceDetectorProcessor(
     override fun onSuccess(results: List<Face>, graphicOverlay: GraphicOverlay) {
         results.forEach {
             graphicOverlay.add(FaceGraphic(graphicOverlay, it, ""))
-            Single.just(recognitionAPI.recognizeImage(imgBitmap))
-                .subscribeOn(Schedulers.computation())
+            Single.just(recognise(it))
+                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe { res ->
                     graphicOverlay.add(FaceGraphic(graphicOverlay, it, res))
                 }
         }
+    }
+
+    private fun recognise(face: Face): String {
+        val frame = Bitmap.createBitmap(imgBitmap!!)
+        val cropFace = Bitmap.createBitmap(120, 120, Bitmap.Config.ARGB_8888)
+        val faceBB = RectF(face.boundingBox)
+        val sx = 120.toFloat()/faceBB.width()
+        val sy = 120.toFloat()/faceBB.height()
+        val matrix = Matrix()
+        matrix.postTranslate(-faceBB.left, -faceBB.top)
+        matrix.postScale(sx, sy)
+        val canvas = Canvas(cropFace)
+        canvas.drawBitmap(frame!!, matrix, null)
+        return recognitionAPI.recognizeImage(cropFace)
     }
 
     override fun onFailure(e: Exception) {

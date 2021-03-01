@@ -5,17 +5,26 @@ import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.util.Log;
 
+import com.example.facedetector.data.DataHelper;
+import com.example.facedetector.data.UserFeatureData;
+import com.google.common.collect.Lists;
+import com.google.gson.Gson;
+
+import org.json.JSONObject;
 import org.tensorflow.lite.Interpreter;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class RecognitionAPI {
 
@@ -33,6 +42,9 @@ public class RecognitionAPI {
     private Interpreter tfLiteDetection;
     private Interpreter tfLiteRecognition;
 
+    private Map<Integer, String> labelMap;
+    private UserFeatureData userFeatureData;
+
     private RecognitionAPI() {}
 
     /** Memory-map the model file in Assets. */
@@ -44,6 +56,14 @@ public class RecognitionAPI {
         long startOffset = fileDescriptor.getStartOffset();
         long declaredLength = fileDescriptor.getDeclaredLength();
         return fileChannel.map(FileChannel.MapMode.READ_ONLY, startOffset, declaredLength);
+    }
+
+    private static String loadJsonFile(AssetManager assetManager, String fileName) throws IOException{
+        InputStream inputStream = assetManager.open(fileName);
+        int size = inputStream.available();
+        byte[] buffer = new byte[size];
+        inputStream.read(buffer);
+        return new String(buffer, "UTF-8");
     }
 
 
@@ -60,6 +80,22 @@ public class RecognitionAPI {
         try {
             d.tfLiteDetection = new Interpreter(loadModelFile(assetManager, "facenet_128.tflite"));
             d.tfLiteRecognition = new Interpreter(loadModelFile(assetManager, "fcnn_20210223_090351.tflite"));
+
+            String json = loadJsonFile(assetManager, "label_map.json");
+            JSONObject jsonObject = new JSONObject(json);
+            List<String> keys = Lists.newArrayList(jsonObject.keys());
+            d.labelMap = new HashMap<>();
+            for(String key: keys){
+                d.labelMap.put(Integer.parseInt(key), jsonObject.getString(key));
+            }
+
+            json = loadJsonFile(assetManager, "user_fea.json");
+            Gson gson = new Gson();
+            d.userFeatureData = gson.fromJson(json, UserFeatureData.class);
+            DataHelper.Companion.checkData(d.userFeatureData);
+            DataHelper.Companion.main();
+            json = loadJsonFile(assetManager, "user_info.json");
+
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -82,27 +118,49 @@ public class RecognitionAPI {
     public String recognizeImage(Bitmap bitmap) {
 
         bitmap = resizedBitmap(bitmap);
+        /*
+         *Lưu ảnh từ bitmap vào imgDetected để detect
+         * */
         convertBitmapToByteBuffer(bitmap);
 
         float[][] embeddings = new float[1][EMBEDDING_SIZE];
+        /*
+         *Trả về vector của mặt lưu vào embeddings
+         * */
         tfLiteDetection.run(imgDetected, embeddings);
 
+        /*
+         *convert embedding sang imgRecognised để làm input
+         * */
         convertEmbeddingToByteBuffer(embeddings);
         int out_size = tfLiteRecognition.getOutputTensor(0).shape()[1];
         float[][] out = new float[1][out_size];
+        /*
+         *Trả về out[0]: độ giống so với các user trong model
+         * */
         tfLiteRecognition.run(imgRecognised, out);
 
         float result = -1;
         int index = -1;
+        /*
+         *Lấy user có độ giống cao nhất
+         * Thông tin user trong file json ở assets
+         * */
         for (int i = 0; i < out[0].length; i++) {
-            Log.d("TAG", "recognizeImage:" + i + " out: " + out[0][i]);
+//            Log.d("TAG", "recognizeImage:" + i + " out: " + out[0][i]);
             if (result< out[0][i]){
                 result = out[0][i];
                 index = i;
             }
         }
 
-        return "UserID: " + index + " confidence: " + result;
+        String userFeatureId = labelMap.get(index);
+//        return "User: " + userFeatureId + " confidence: " + result;
+        if (DataHelper.Companion.confirmUser(embeddings[0], userFeatureId, userFeatureData)){
+            return "User: " + userFeatureId + " confidence: " + result;
+        }
+        return String.valueOf(result);
+
     }
 
     private Bitmap resizedBitmap(Bitmap bitmap) {
